@@ -569,6 +569,8 @@
           <div class="form-group">
             <input type="text" name="company" placeholder="Company (optional)" />
           </div>
+          <!-- Honeypot field: hidden from humans, visible to bots -->
+          <input type="text" name="website" style="display:none;" tabindex="-1" autocomplete="off" />
           <button type="submit">
             <span class="button-text">Pre-Register Now</span>
             <span class="spinner"></span>
@@ -606,12 +608,38 @@
       successMessage.style.display = 'none';
       errorMessage.style.display = 'none';
 
+      // FRONTEND RATE LIMITING: Check if user submitted recently
+      const lastSubmitTime = localStorage.getItem('lastSubmitTime');
+      if (lastSubmitTime) {
+        const timeSinceLastSubmit = Date.now() - parseInt(lastSubmitTime);
+        const cooldownPeriod = 2 * 60 * 1000; // 2 minutes
+
+        if (timeSinceLastSubmit < cooldownPeriod) {
+          const remainingSeconds = Math.ceil((cooldownPeriod - timeSinceLastSubmit) / 1000);
+          errorMessage.textContent = `⚠️ Please wait ${remainingSeconds} seconds before submitting again.`;
+          errorMessage.style.display = 'block';
+          submitButton.classList.remove('loading');
+          submitButton.disabled = false;
+          return;
+        }
+      }
+
       const formData = {
         name: form.name.value.trim(),
         email: form.email.value.trim(),
         company: form.company.value.trim(),
+        website: form.website.value, // Honeypot field
         timestamp: new Date().toISOString()
       };
+
+      // Basic frontend validation
+      if (!formData.name || formData.name.length < 2) {
+        errorMessage.textContent = '⚠️ Please enter your name.';
+        errorMessage.style.display = 'block';
+        submitButton.classList.remove('loading');
+        submitButton.disabled = false;
+        return;
+      }
 
       if (!formData.email) {
         errorMessage.textContent = '⚠️ Please enter your email.';
@@ -627,6 +655,7 @@
         formDataObj.append('name', formData.name);
         formDataObj.append('email', formData.email);
         formDataObj.append('company', formData.company);
+        formDataObj.append('website', formData.website); // Include honeypot
         formDataObj.append('timestamp', formData.timestamp);
 
         const res = await fetch(scriptURL, {
@@ -637,6 +666,9 @@
         const result = await res.json();
 
         if (result.result === 'success') {
+          // Store submission time for rate limiting
+          localStorage.setItem('lastSubmitTime', Date.now().toString());
+
           successMessage.style.display = 'block';
           form.reset();
 
@@ -645,7 +677,7 @@
             successMessage.style.display = 'none';
           }, 5000);
         } else {
-          errorMessage.textContent = '⚠️ Error: ' + (result.message || 'Please try again');
+          errorMessage.textContent = '⚠️ ' + (result.message || 'Please try again');
           errorMessage.style.display = 'block';
         }
       } catch (err) {
