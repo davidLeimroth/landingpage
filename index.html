@@ -553,10 +553,16 @@
       }
 
       try {
+        // Use FormData to avoid CORS preflight
+        const formDataObj = new FormData();
+        formDataObj.append('name', formData.name);
+        formDataObj.append('email', formData.email);
+        formDataObj.append('company', formData.company);
+        formDataObj.append('timestamp', formData.timestamp);
+
         const res = await fetch(scriptURL, {
           method: 'POST',
-          body: JSON.stringify(formData),
-          headers: { 'Content-Type': 'application/json' }
+          body: formDataObj
         });
 
         const result = await res.json();
