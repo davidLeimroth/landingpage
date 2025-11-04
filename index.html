@@ -100,6 +100,68 @@
       -webkit-text-fill-color: transparent;
       background-clip: text;
       letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 32px;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 2px;
+      padding: 4px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+
+    .logo-icon::before,
+    .logo-icon::after,
+    .logo-icon .pillar-1,
+    .logo-icon .pillar-2 {
+      content: '';
+      width: 4px;
+      background: white;
+      border-radius: 1.5px;
+      transition: all 0.3s ease;
+    }
+
+    .logo-icon::before {
+      height: 16px;
+    }
+
+    .logo-icon .pillar-1 {
+      height: 22px;
+      display: block;
+    }
+
+    .logo-icon .pillar-2 {
+      height: 20px;
+      display: block;
+    }
+
+    .logo-icon::after {
+      height: 24px;
+    }
+
+    .logo:hover .logo-icon::before {
+      height: 18px;
+    }
+
+    .logo:hover .logo-icon .pillar-1 {
+      height: 24px;
+    }
+
+    .logo:hover .logo-icon .pillar-2 {
+      height: 22px;
+    }
+
+    .logo:hover .logo-icon::after {
+      height: 26px;
     }
 
     /* Hero Section */
@@ -433,7 +495,13 @@
 
   <div class="container">
     <nav>
-      <div class="logo">📊 Plotono</div>
+      <div class="logo">
+        <div class="logo-icon">
+          <span class="pillar-1"></span>
+          <span class="pillar-2"></span>
+        </div>
+        Plotono
+      </div>
     </nav>
 
     <section class="hero">
