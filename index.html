@@ -107,62 +107,50 @@
     }
 
     .logo-icon {
-      width: 36px;
+      width: 32px;
       height: 32px;
       position: relative;
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 2px;
-      padding: 4px;
       background: linear-gradient(135deg, var(--primary), var(--secondary));
       border-radius: 6px;
       box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .logo-icon::before,
-    .logo-icon::after,
-    .logo-icon .pillar-1,
-    .logo-icon .pillar-2 {
-      content: '';
-      width: 4px;
-      background: white;
-      border-radius: 1.5px;
-      transition: all 0.3s ease;
-    }
-
+    /* Pie chart using conic gradient */
     .logo-icon::before {
-      height: 16px;
+      content: '';
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 0deg,
+        white 0deg 120deg,
+        rgba(255, 255, 255, 0.7) 120deg 200deg,
+        rgba(255, 255, 255, 0.4) 200deg 280deg,
+        rgba(255, 255, 255, 0.2) 280deg 360deg
+      );
+      transition: transform 0.3s ease;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
     }
 
-    .logo-icon .pillar-1 {
-      height: 22px;
-      display: block;
-    }
-
-    .logo-icon .pillar-2 {
-      height: 20px;
-      display: block;
-    }
-
+    /* Dividing lines for pie slices */
     .logo-icon::after {
-      height: 24px;
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      background:
+        linear-gradient(to bottom right, transparent 49%, rgba(99, 102, 241, 0.5) 49%, rgba(99, 102, 241, 0.5) 51%, transparent 51%),
+        linear-gradient(to bottom left, transparent 49%, rgba(99, 102, 241, 0.5) 49%, rgba(99, 102, 241, 0.5) 51%, transparent 51%);
+      background-size: 100% 100%;
+      background-position: center;
+      border-radius: 50%;
     }
 
     .logo:hover .logo-icon::before {
-      height: 18px;
-    }
-
-    .logo:hover .logo-icon .pillar-1 {
-      height: 24px;
-    }
-
-    .logo:hover .logo-icon .pillar-2 {
-      height: 22px;
-    }
-
-    .logo:hover .logo-icon::after {
-      height: 26px;
+      transform: rotate(15deg) scale(1.1);
     }
 
     /* Hero Section */
@@ -497,10 +485,7 @@
   <div class="container">
     <nav>
       <div class="logo">
-        <div class="logo-icon">
-          <span class="pillar-1"></span>
-          <span class="pillar-2"></span>
-        </div>
+        <div class="logo-icon"></div>
         Plotono
       </div>
     </nav>
